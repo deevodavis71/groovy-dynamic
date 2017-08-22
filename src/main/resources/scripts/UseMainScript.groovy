@@ -1,17 +1,20 @@
-//import groovy.transform.BaseScript
-//@BaseScript MainScript mainScript
-
 import com.sjd.groovytest.ITestScript
 import com.sjd.groovytest.Payload
 
-// println "$meaningOfLife" //works as expected
+// Import enum values as constants.
+import static Task.*
+import static Client.*
 
-class TestDependency implements ITestScript {
+class TestDependency extends MainScript implements ITestScript {
 
     String getMessage(Payload p) {
-
-		def ms = new MainScript ();
-        return "Jello - " + ms.meaningOfLife + " " + ms.favColor () 
+				
+		worked 2.hours on design at GroovyRoom
+		developed 3.hours at OfficeSpace
+		developed 1.hour at GroovyRoom
+		worked 4.hours on testing at GroovyRoom
+		
+        return "Jello - " + meaningOfLife + " " + favColor () 
     }
     
 }
