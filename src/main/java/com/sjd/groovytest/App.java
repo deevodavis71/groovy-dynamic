@@ -23,6 +23,8 @@ public class App {
 		for (int i = 0; i < 10; i++)
 			compileAndExecute("simple", script);
 
+		String dsl = loadScript(App.class, "scripts/Dsl.groovy");
+
 	}
 
 	public static String loadScript(Class clazz, String name) throws Exception {
