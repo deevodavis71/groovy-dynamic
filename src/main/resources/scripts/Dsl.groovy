@@ -1,4 +1,6 @@
 // http://mrhaki.blogspot.co.uk/2011/05/groovy-goodness-command-chain.html 
+
+// http://mrhaki.blogspot.co.uk/2009/11/groovy-goodness-running-groovy-scripts.html
  
 // Constants for tasks and clients.
 enum Task { design, testing, developing }

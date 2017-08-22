@@ -16,6 +16,8 @@ public class App {
 
 	public static Hashtable<String, Class<?>> cache = new Hashtable<>();
 
+	public static GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
+
 	public static void main(String[] args) throws Exception {
 
 		String script = loadScript(App.class, "scripts/Simple1.groovy");
@@ -25,12 +27,38 @@ public class App {
 
 		String dsl = loadScript(App.class, "scripts/Dsl.groovy");
 
+		String main = loadScript(App.class, "scripts/MainScript.groovy");
+		Class<?> m = createCachedClass("mainScript", main);
+
+		String useMain = loadScript(App.class, "scripts/UseMainScript.groovy");
+		Class<?> um = createCachedClass("useMainScript", useMain);
+
+		Payload p = new Payload();
+		p.setLatitude(100);
+		p.setLongitude(200);
+
+		ITestScript ts = (ITestScript) um.newInstance();
+		String message = ts.getMessage(p);
+
+		System.out.println("Dependent script : " + message);
+
 	}
 
 	public static String loadScript(Class clazz, String name) throws Exception {
 
 		return IOUtils.toString(clazz.getClassLoader().getResourceAsStream(name));
 
+	}
+
+	public static Class<?> createCachedClass(String name, String script) throws Exception {
+
+		Class<?> theParsedClass = groovyClassLoader.parseClass(script);
+		groovyClassLoader.close();
+
+		// Put it in the cache
+		cache.put(name, theParsedClass);
+
+		return theParsedClass;
 	}
 
 	public static void compileAndExecute(String name, String script) throws Exception {
@@ -47,12 +75,8 @@ public class App {
 
 		} else {
 
-			GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-			theParsedClass = groovyClassLoader.parseClass(script);
-			groovyClassLoader.close();
-
-			// Put it in the cache
-			cache.put(name, theParsedClass);
+			// Compile and add to the cache
+			theParsedClass = createCachedClass(name, script);
 
 		}
 
